@@ -9,28 +9,26 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const messageSchema = new Schema({
-    content: { type: String }
+  content: { type: String }
 })
 
-const MessageModel = mongoose.model("Message", messageSchema);
+const messageModel = mongoose.model("Message", messageSchema)
 
-app.get('/', (req, res) => {
+app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-        const message = new messageModel();
-        message.content = msg;
-        message.save().then(m => {
-            io.emit('chat message', msg);
-        })
-    });
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    const message = new messageModel();
+    message.content = msg;
+    message.save().then(m => {
+      io.emit('chat message', msg);
+    })
+  });
 });
 
-
-
-server.listen(3000, async function() {
-    await mongoose.connect("mongodb+srv://angiewang:<NWrO0Pb4tkkisgGl>@cluster0.0kcs8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+server.listen(3000, async function(){
+  await mongoose.connect("mongodb+srv://angiewang:<NWrO0Pb4tkkisgGl>@cluster0.0kcs8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
   console.log('listening on *:3000');
 });
